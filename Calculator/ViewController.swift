@@ -37,6 +37,8 @@ class ViewController: UIViewController {
             }
         }
     }
+
+  
     
     var savedProgram: CalculatorBrain.PropertyList?
     
@@ -51,6 +53,18 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    @IBAction func setVar(sender: UIButton) {
+        brain.variableValues[sender.currentTitle!] = displayValue
+        brain.setOperand(sender.currentTitle!)
+
+    }
+    @IBAction func getVar(sender: UIButton) {
+        
+        let variableToGet = sender.currentTitle!.startIndex..<sender.currentTitle!.endIndex
+        displayValue = brain.variableValues[variableToGet]
+    }
+    
     
     
     private var brain = CalculatorBrain()

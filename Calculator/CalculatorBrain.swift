@@ -20,6 +20,13 @@ class CalculatorBrain {
         internalProgram.append(operand)
     }
     
+    func setOperand(variable: String) {
+        accumulator = variableValues[variable]!
+        print("variable \(variable) set as \(variableValues[variable]!)")
+    }
+    
+    var variableValues: Dictionary<String, Double> = [:]
+    
     private var operations: Dictionary<String, Operation> = [
         "π" : Operation.Constant(M_PI), // M_PI,
         "e" : Operation.Constant(M_E), // M_E,
@@ -66,7 +73,9 @@ class CalculatorBrain {
         pending = nil
         accumulator = 0
         internalProgram.removeAll()
+        variableValues = [:]
     }
+    
     private func executePendingBinaryOperation() {
         if pending != nil {
             accumulator = pending!.binaryFunction(pending!.firstOperand, accumulator)
