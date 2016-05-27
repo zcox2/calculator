@@ -55,14 +55,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func setVar(sender: UIButton) {
-        brain.variableValues[sender.currentTitle!] = displayValue
+        let variableName = String(sender.currentTitle!.characters.dropFirst())
+        brain.variableValues[variableName] = displayValue
         userIsInTheMiddleOfTyping = false
-
     }
     
     @IBAction func getVar(sender: UIButton) {
-        let variable = String(sender.currentTitle!.characters.dropFirst())
-        if let variableValue = brain.variableValues[variable] {
+        if let variableValue = brain.variableValues[sender.currentTitle!] {
             displayValue = variableValue
             brain.setOperand(variableValue)
         } else {

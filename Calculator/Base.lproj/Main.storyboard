@@ -192,7 +192,7 @@
                                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                         <state key="normal" title="→M"/>
                                                         <connections>
-                                                            <action selector="getVar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="it3-7P-7ha"/>
+                                                            <action selector="setVar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="v0X-zE-tKt"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g3n-4j-XTL">
@@ -242,7 +242,7 @@
                                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                         <state key="normal" title="M"/>
                                                         <connections>
-                                                            <action selector="setVar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TZV-8T-hE2"/>
+                                                            <action selector="getVar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pnV-T1-xfV"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zP4-oY-JpX">
