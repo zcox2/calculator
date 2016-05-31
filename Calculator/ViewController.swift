@@ -62,12 +62,14 @@ class ViewController: UIViewController {
     
     @IBAction func getVar(sender: UIButton) {
         if let variableValue = brain.variableValues[sender.currentTitle!] {
-            displayValue = variableValue
             brain.setOperand(variableValue)
+            displayValue = brain.result
+            
         } else {
             displayValue = 0
             brain.setOperand(0)
         }
+        updateDisplay()
         userIsInTheMiddleOfTyping = false
     }
     
@@ -80,15 +82,23 @@ class ViewController: UIViewController {
             userIsInTheMiddleOfTyping = false
         }
         
+
+        
         if let mathematicalSymbol = sender.currentTitle {
             brain.performOperation(mathematicalSymbol)
             displayValue = brain.result
         }
+        updateDisplay()
         
     }
     
+    private func updateDisplay() {
+            descrip!.text! = String(brain.program)
+    }
+    
     @IBOutlet private weak var display: UILabel!
-
+    
+    @IBOutlet weak var descrip: UILabel!
 
 }
 

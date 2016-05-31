@@ -13,6 +13,8 @@ class CalculatorBrain {
     
     private var accumulator = 0.0
     private var internalProgram = [AnyObject]()
+    private var isPartialResult = false
+    private var isCleared = true
     
     
     func setOperand(operand: Double) {
@@ -22,7 +24,7 @@ class CalculatorBrain {
     
     func setOperand(variable: String) {
         accumulator = variableValues[variable]!
-        print("variable \(variable) set as \(variableValues[variable]!)")
+        internalProgram.append(variable)
     }
     
     var variableValues: Dictionary<String, Double> = [:]
@@ -51,25 +53,36 @@ class CalculatorBrain {
     }
     
     func performOperation(symbol: String) {
-        internalProgram.append(symbol)
+        isCleared = false
         if let operation = operations[symbol] {
             switch operation {
             case .Constant(let value):
                 accumulator = value
             case .UnaryOperation(let function):
                 accumulator = function(accumulator)
+                internalProgram.append(symbol)
             case .BinaryOperation(let function):
                 executePendingBinaryOperation()
                 pending = PendingBinaryOperationInfo(binaryFunction: function, firstOperand: accumulator)
+                internalProgram.append(symbol)
             case .Equals:
                 executePendingBinaryOperation()
             case .Clear:
                 clear()
             }
         }
+        
+        if pending == nil {
+            isPartialResult = false
+        } else {
+            isPartialResult = true
+        }
+        
     }
     
+    
     private func clear() {
+        isCleared = true
         pending = nil
         accumulator = 0
         internalProgram.removeAll()
@@ -94,7 +107,18 @@ class CalculatorBrain {
     
     var program: PropertyList {
         get {
-            return internalProgram
+            var operationString = ""
+            for op in internalProgram {
+                operationString += String(op)
+            }
+            
+            if isPartialResult == true {
+                return operationString + ("...")
+            } else if isCleared {
+                return operationString + (" ")
+            } else {
+                return operationString + ("=")
+            }
         }
         set {
             clear()
