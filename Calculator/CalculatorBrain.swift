@@ -19,12 +19,11 @@ class CalculatorBrain {
     
     func setOperand(operand: Double) {
         accumulator = operand
-        internalProgram.append(operand)
     }
     
     func setOperand(variable: String) {
         accumulator = variableValues[variable]!
-        internalProgram.append(variable)
+        internalProgram.append("M")
     }
     
     var variableValues: Dictionary<String, Double> = [:]
@@ -55,12 +54,18 @@ class CalculatorBrain {
     func performOperation(symbol: String) {
         isCleared = false
         if let operation = operations[symbol] {
+            internalProgram.append(accumulator)
             switch operation {
             case .Constant(let value):
                 accumulator = value
+                internalProgram.append(symbol)
             case .UnaryOperation(let function):
                 accumulator = function(accumulator)
-                internalProgram.append(symbol)
+                if isPartialResult == false {
+                    internalProgram.insert("(", atIndex: 0)
+                    internalProgram.append(")")
+                }
+                internalProgram.insert(symbol, atIndex: internalProgram.count - 1)
             case .BinaryOperation(let function):
                 executePendingBinaryOperation()
                 pending = PendingBinaryOperationInfo(binaryFunction: function, firstOperand: accumulator)
@@ -70,6 +75,7 @@ class CalculatorBrain {
             case .Clear:
                 clear()
             }
+            
         }
         
         if pending == nil {
@@ -87,6 +93,13 @@ class CalculatorBrain {
         accumulator = 0
         internalProgram.removeAll()
         variableValues = [:]
+    }
+    
+    func clearDisplay() {
+        isCleared = true
+        pending = nil
+        accumulator = 0
+        internalProgram.removeAll()
     }
     
     private func executePendingBinaryOperation() {

@@ -61,8 +61,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func getVar(sender: UIButton) {
-        if let variableValue = brain.variableValues[sender.currentTitle!] {
-            brain.setOperand(variableValue)
+        if brain.variableValues[sender.currentTitle!] != nil {
+            brain.setOperand(sender.currentTitle!)
             displayValue = brain.result
             
         } else {
@@ -73,6 +73,10 @@ class ViewController: UIViewController {
         userIsInTheMiddleOfTyping = false
     }
     
+    @IBAction func clearDisplay(sender: UIButton) {
+        brain.clearDisplay()
+        updateDisplay()
+    }
     
     private var brain = CalculatorBrain()
     

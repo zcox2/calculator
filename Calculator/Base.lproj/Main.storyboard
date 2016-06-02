@@ -287,8 +287,9 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="180" height="66"/>
                                                         <color key="backgroundColor" red="1" green="0.70968436589999995" blue="0.36943163350000002" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                        <state key="normal" title="clear all"/>
+                                                        <state key="normal" title="clear display"/>
                                                         <connections>
+                                                            <action selector="clearDisplay:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wxQ-gO-NcF"/>
                                                             <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QZO-Sa-iLj"/>
                                                         </connections>
                                                     </button>
