@@ -15,15 +15,28 @@ class CalculatorBrain {
     private var internalProgram = [AnyObject]()
     private var isPartialResult = false
     private var isCleared = true
+    private var pendingImplicitOperation = false
     
     
     func setOperand(operand: Double) {
         accumulator = operand
+        internalProgram.append(operand)
     }
     
     func setOperand(variable: String) {
-        accumulator = variableValues[variable]!
-        internalProgram.append("M")
+        if let variableValue = variableValues[variable]{
+            accumulator = variableValue
+            internalProgram.append(variable)
+        } else {
+            pendingImplicitOperation = true
+            accumulator = 0.0
+            internalProgram.append(variable)
+        }
+        
+    }
+    
+    func updateProgram() {
+        program = internalProgram
     }
     
     var variableValues: Dictionary<String, Double> = [:]
@@ -54,38 +67,48 @@ class CalculatorBrain {
     func performOperation(symbol: String) {
         isCleared = false
         if let operation = operations[symbol] {
-            internalProgram.append(accumulator)
             switch operation {
+                
             case .Constant(let value):
                 accumulator = value
                 internalProgram.append(symbol)
+                
             case .UnaryOperation(let function):
                 accumulator = function(accumulator)
                 if isPartialResult == false {
                     internalProgram.insert("(", atIndex: 0)
                     internalProgram.append(")")
                 }
-                internalProgram.insert(symbol, atIndex: internalProgram.count - 1)
+                internalProgram.insert(symbol, atIndex: 0)
+                
             case .BinaryOperation(let function):
                 executePendingBinaryOperation()
                 pending = PendingBinaryOperationInfo(binaryFunction: function, firstOperand: accumulator)
                 internalProgram.append(symbol)
+                
             case .Equals:
                 executePendingBinaryOperation()
+                if pendingImplicitOperation {
+                    var internalProgramString = ""
+                    for item in internalProgram {
+                        internalProgramString += String(item) + " "
+                    }
+                    print(internalProgramString)
+                    program = internalProgram
+                    pendingImplicitOperation = false
+
+                }
+                
             case .Clear:
                 clear()
             }
             
         }
         
-        if pending == nil {
-            isPartialResult = false
-        } else {
-            isPartialResult = true
-        }
+        if pending == nil {isPartialResult = false
+        } else {isPartialResult = true}
         
     }
-    
     
     private func clear() {
         isCleared = true
@@ -135,12 +158,20 @@ class CalculatorBrain {
         }
         set {
             clear()
+            internalProgram.removeAll()
             if let arrayOfOps = newValue as? [AnyObject] {
                 for op in arrayOfOps {
                     if let operand = op as? Double {
                         setOperand(operand)
-                    } else if let operation = op as? String {
-                        performOperation(operation)
+                    } else if let variableOrOperation = op as? String {
+                        if let variable = variableValues[variableOrOperation] {
+                            setOperand(variable)
+                        } else if pendingImplicitOperation {
+                            // do something!!!!!!!
+                        } else {
+                            let operation = variableOrOperation
+                            performOperation(operation)
+                        }
                     }
                 }
             }

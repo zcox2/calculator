@@ -58,6 +58,7 @@ class ViewController: UIViewController {
         let variableName = String(sender.currentTitle!.characters.dropFirst())
         brain.variableValues[variableName] = displayValue
         userIsInTheMiddleOfTyping = false
+        // brain.updateProgram()
     }
     
     @IBAction func getVar(sender: UIButton) {
@@ -67,7 +68,7 @@ class ViewController: UIViewController {
             
         } else {
             displayValue = 0
-            brain.setOperand(0)
+            brain.setOperand(sender.currentTitle!)
         }
         updateDisplay()
         userIsInTheMiddleOfTyping = false
