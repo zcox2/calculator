@@ -24,13 +24,19 @@ class CalculatorBrain {
     }
     
     func setOperand(variable: String) {
-        if let variableValue = variableValues[variable]{
+        if let variableValue = variableValues[variable] {
+            print("\(variable) set to \(variableValue)")
             accumulator = variableValue
             internalProgram.append(variable)
+            if pendingImplicitOperation {
+                program = internalProgram
+                print("tick")
+            }
         } else {
             pendingImplicitOperation = true
             accumulator = 0.0
             internalProgram.append(variable)
+            print("tock")
         }
         
     }
@@ -94,8 +100,6 @@ class CalculatorBrain {
                         internalProgramString += String(item) + " "
                     }
                     print(internalProgramString)
-                    program = internalProgram
-                    pendingImplicitOperation = false
 
                 }
                 
@@ -157,23 +161,35 @@ class CalculatorBrain {
             }
         }
         set {
-            clear()
-            internalProgram.removeAll()
+            clearDisplay()
             if let arrayOfOps = newValue as? [AnyObject] {
                 for op in arrayOfOps {
+                    
                     if let operand = op as? Double {
                         setOperand(operand)
+                        print("\(op), loop 1")
+                    } else if op as! String == "(" || op as! String == ")" {
+                        
                     } else if let variableOrOperation = op as? String {
-                        if let variable = variableValues[variableOrOperation] {
-                            setOperand(variable)
-                        } else if pendingImplicitOperation {
-                            // do something!!!!!!!
-                        } else {
+                        print("\(op), loop 2")
+                        print("\(op), \(variableValues["/(op)"])")
+                        if variableValues[variableOrOperation] != nil {
+                            print("\(op), loop 2a")
+                            pendingImplicitOperation = false
+                            setOperand(variableOrOperation)
+                            
+                        } else if operations[variableOrOperation] != nil {
+                            print("\(op) loop 2b")
                             let operation = variableOrOperation
                             performOperation(operation)
+                        } else {
+                            print("\(op), loop 2c")
+                            setOperand(variableOrOperation)
                         }
                     }
+                    
                 }
+
             }
         }
     }
