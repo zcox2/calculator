@@ -113,6 +113,8 @@ class CalculatorBrain {
             case .ClearDisplay:
                 clearDisplay()
             }
+        if pending == nil {isPartialResult = false
+        } else {isPartialResult = true}
         }
     }
     
