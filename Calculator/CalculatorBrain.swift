@@ -58,7 +58,8 @@ class CalculatorBrain {
         "+" : Operation.BinaryOperation({ $0 + $1 }),
         "−" : Operation.BinaryOperation({ $0 - $1 }),
         "=" : Operation.Equals,
-        "clear" : Operation.Clear
+        "clear" : Operation.Clear,
+        "clear display" : Operation.ClearDisplay
     ]
     
     
@@ -68,6 +69,7 @@ class CalculatorBrain {
         case BinaryOperation((Double, Double) -> Double)
         case Equals
         case Clear
+        case ClearDisplay
     }
     
     func performOperation(symbol: String) {
@@ -105,6 +107,8 @@ class CalculatorBrain {
                 
             case .Clear:
                 clear()
+            case .ClearDisplay:
+                clearDisplay()
             }
             
         }
@@ -196,6 +200,7 @@ class CalculatorBrain {
     
     var result: Double {
         get {
+           
             return accumulator
         }
     }

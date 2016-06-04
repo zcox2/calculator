@@ -35,6 +35,9 @@ class ViewController: UIViewController {
             } else {
                 display.text = String(newValue)
             }
+            let formatter = NSNumberFormatter()
+            formatter.maximumFractionDigits = 6
+            display.text = formatter.stringFromNumber(NSNumber(double: newValue))
         }
     }
 
@@ -74,7 +77,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func clearDisplay(sender: UIButton) {
-        brain.clearDisplay()
         updateDisplay()
     }
     
