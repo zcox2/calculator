@@ -176,17 +176,30 @@ class CalculatorBrain {
     
     private func sanitizeProgramArray(arrayOfOps: [AnyObject]) -> [AnyObject] {
         var mutableArrayOfOps = arrayOfOps
+        var sanitizedArrayOfOps = [AnyObject]()
+        var nonUnaryOpCounter = 0
         for op in mutableArrayOfOps {
             if unaryOperations.contains(String(op)) {
                 print("unary operation \(op) recognized, placing to back of loop")
-                mutableArrayOfOps.removeFirst()
+                mutableArrayOfOps.removeAtIndex(nonUnaryOpCounter)
                 mutableArrayOfOps.append("=")
                 mutableArrayOfOps.append(String(op))
-            } else if op as! String == "(" || op as! String == ")" {
-                print("\(op), dropped parenthesis loop")
+            } else {
+                nonUnaryOpCounter += 1
             }
         }
-        return mutableArrayOfOps
+        for op in mutableArrayOfOps {
+            if String(op) != "(" && String(op) != ")" {
+                sanitizedArrayOfOps.append(op)
+            }
+            if String(op) == ")" {
+                sanitizedArrayOfOps.append("=")
+            }
+        }
+        for op in sanitizedArrayOfOps {
+            print(String(op))
+        }
+        return sanitizedArrayOfOps
     }
     
     var program: PropertyList {
@@ -238,7 +251,6 @@ class CalculatorBrain {
     
     var result: Double {
         get {
-            
             return accumulator
         }
     }
