@@ -23,37 +23,24 @@ class CalculatorBrain {
         internalProgram.append(operand)
     }
     func variableUpdated() {
-        if variableValues.count == 0 {
-            print("variableValues has no items")
-            print("pendingImplicitOperation is \(pendingImplicitOperation)")
-        } else {
-            print("variableValues has \(variableValues.count) items")
-            pendingImplicitOperation = false
-            print("pendingImplicitOperation is \(pendingImplicitOperation)")
-            updateProgram()
-        }
-        
+        pendingImplicitOperation = false
+        updateProgram()
     }
     
     func setOperand(variable: String) {
-        if let variableValue = variableValues[variable] {
+        if let variableValue = variableValues[variable] { // variable is set to a value
             print("\(variable) set to \(variableValue)")
             accumulator = variableValue
             internalProgram.append(variable)
-            if pendingImplicitOperation {
-                program = internalProgram
-                print("variable \(variable) accessed with value \(variableValue), program is rerun")
-            }
-        } else {
+        } else { // variable is unset
             pendingImplicitOperation = true
             accumulator = 0.0
             internalProgram.append(variable)
             print("variable \(variable) accessed as zero, pendingImplicitOperation is \(pendingImplicitOperation)")
         }
-        
     }
     
-    func updateProgram() {
+    private func updateProgram() {
         program = internalProgram
     }
     
@@ -118,29 +105,15 @@ class CalculatorBrain {
                         internalProgramString += String(item) + " "
                     }
                     print(internalProgramString)
-                    
                 }
-                //                if variableValues.count == 0 {
-                //                    print("variableValues has no items")
-                //                    print("pendingImplicitOperation is \(pendingImplicitOperation)")
-                //                } else {
-                //                    print("variableValues has \(variableValues.count) items")
-                //                    pendingImplicitOperation = false
-                //                    print("pendingImplicitOperation is \(pendingImplicitOperation)")
-                //                    updateProgram()
-                //                }
                 
             case .Clear:
                 clear()
+                
             case .ClearDisplay:
                 clearDisplay()
             }
-            
         }
-        
-        if pending == nil {isPartialResult = false
-        } else {isPartialResult = true}
-        
     }
     
     private func clear() {
@@ -178,6 +151,10 @@ class CalculatorBrain {
         var mutableArrayOfOps = arrayOfOps
         var sanitizedArrayOfOps = [AnyObject]()
         var nonUnaryOpCounter = 0
+        
+        // -> removes unary operations and tags them onto end of mutable array
+        // NOTE: calculator will not work as expected for multiple unary operations 
+        //       when mixed with binary operations
         for op in mutableArrayOfOps {
             if unaryOperations.contains(String(op)) {
                 print("unary operation \(op) recognized, placing to back of loop")
@@ -188,6 +165,8 @@ class CalculatorBrain {
                 nonUnaryOpCounter += 1
             }
         }
+        
+        // -> adds all items except parenthesis to sanitizedArrayOfOps
         for op in mutableArrayOfOps {
             if String(op) != "(" && String(op) != ")" {
                 sanitizedArrayOfOps.append(op)
@@ -204,11 +183,11 @@ class CalculatorBrain {
     
     var program: PropertyList {
         get {
+            // -> Adds indicators to end of display to show the status of the calculator
             var operationString = ""
             for op in internalProgram {
                 operationString += String(op)
             }
-            
             if isPartialResult == true {
                 return operationString + ("...")
             } else if isCleared {
@@ -222,29 +201,20 @@ class CalculatorBrain {
             if let arrayOfOps = newValue as? [AnyObject] {
                 let sanitizedArrayOfOps = sanitizeProgramArray(arrayOfOps)
                 for op in sanitizedArrayOfOps {
-                    if let operand = op as? Double {
+                    if let operand = op as? Double { // if it's an operand
                         setOperand(operand)
-                        print("\(op), loop 1")
                     } else if let variableOrOperation = op as? String {
-                        print("\(op), loop 2")
-                        print("\(op), \(variableValues["/(op)"])")
-                        if variableValues[variableOrOperation] != nil {
-                            print("\(op), loop 2a")
+                        if variableValues[variableOrOperation] != nil { // if it's a variable
                             pendingImplicitOperation = false
                             setOperand(variableOrOperation)
-                            
-                        } else if operations[variableOrOperation] != nil {
-                            print("\(op) loop 2b")
+                        } else if operations[variableOrOperation] != nil { // if it's an operation
                             let operation = variableOrOperation
                             performOperation(operation)
-                        } else {
-                            print("\(op), loop 2c")
+                        } else { // it's a variable, but is unset
                             setOperand(variableOrOperation)
                         }
                     }
-                    
                 }
-                
             }
         }
     }
