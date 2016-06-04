@@ -16,11 +16,13 @@ class CalculatorBrain {
     private var isPartialResult = false
     private var isCleared = true
     private var pendingImplicitOperation = false
+    private var history = [AnyObject]()
     
     
     func setOperand(operand: Double) {
         accumulator = operand
         internalProgram.append(operand)
+        history.append(operand)
     }
     func variableUpdated() {
         pendingImplicitOperation = false
@@ -39,10 +41,11 @@ class CalculatorBrain {
             internalProgram.append(variable)
             print("variable \(variable) accessed as zero, pendingImplicitOperation is \(pendingImplicitOperation)")
         }
+        history.append(variable)
     }
     
     private func updateProgram() {
-        program = internalProgram
+        program = history
     }
     
     var variableValues: Dictionary<String, Double> = [:]
@@ -77,6 +80,7 @@ class CalculatorBrain {
     }
     
     func performOperation(symbol: String) {
+        history.append(symbol)
         isCleared = false
         if let operation = operations[symbol] {
             switch operation {
@@ -107,6 +111,9 @@ class CalculatorBrain {
                     }
                     print(internalProgramString)
                 }
+                for op in history {
+                    print(String(op))
+                }
                 
             case .Clear:
                 clear()
@@ -120,6 +127,7 @@ class CalculatorBrain {
     }
     
     private func clear() {
+        history.removeAll()
         isCleared = true
         pending = nil
         accumulator = 0
@@ -128,6 +136,7 @@ class CalculatorBrain {
     }
     
     func clearDisplay() {
+        history.removeAll()
         isCleared = true
         pending = nil
         accumulator = 0
@@ -150,40 +159,6 @@ class CalculatorBrain {
     
     typealias PropertyList = AnyObject
     
-    private func sanitizeProgramArray(arrayOfOps: [AnyObject]) -> [AnyObject] {
-        var mutableArrayOfOps = arrayOfOps
-        var sanitizedArrayOfOps = [AnyObject]()
-        var nonUnaryOpCounter = 0
-        
-        // -> removes unary operations and tags them onto end of mutable array
-        // NOTE: calculator will not work as expected for multiple unary operations 
-        //       when mixed with binary operations
-        for op in mutableArrayOfOps {
-            if unaryOperations.contains(String(op)) {
-                print("unary operation \(op) recognized, placing to back of loop")
-                mutableArrayOfOps.removeAtIndex(nonUnaryOpCounter)
-                mutableArrayOfOps.append("=")
-                mutableArrayOfOps.append(String(op))
-            } else {
-                nonUnaryOpCounter += 1
-            }
-        }
-        
-        // -> adds all items except parenthesis to sanitizedArrayOfOps
-        for op in mutableArrayOfOps {
-            if String(op) != "(" && String(op) != ")" {
-                sanitizedArrayOfOps.append(op)
-            }
-            if String(op) == ")" {
-                sanitizedArrayOfOps.append("=")
-            }
-        }
-        for op in sanitizedArrayOfOps {
-            print(String(op))
-        }
-        return sanitizedArrayOfOps
-    }
-    
     var program: PropertyList {
         get {
             // -> Adds indicators to end of display to show the status of the calculator
@@ -202,8 +177,7 @@ class CalculatorBrain {
         set {
             clearDisplay()
             if let arrayOfOps = newValue as? [AnyObject] {
-                let sanitizedArrayOfOps = sanitizeProgramArray(arrayOfOps)
-                for op in sanitizedArrayOfOps {
+                for op in arrayOfOps {
                     if let operand = op as? Double { // if it's an operand
                         setOperand(operand)
                     } else if let variableOrOperation = op as? String {
