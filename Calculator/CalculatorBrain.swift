@@ -74,6 +74,10 @@ class CalculatorBrain {
         "clear display" : Operation.ClearDisplay
     ]
     
+    private var unaryOperations: Set<String> = [
+        "cos",
+        "√"
+    ]
     
     private enum Operation {
         case Constant(Double)
@@ -170,6 +174,21 @@ class CalculatorBrain {
     
     typealias PropertyList = AnyObject
     
+    private func sanitizeProgramArray(arrayOfOps: [AnyObject]) -> [AnyObject] {
+        var mutableArrayOfOps = arrayOfOps
+        for op in mutableArrayOfOps {
+            if unaryOperations.contains(String(op)) {
+                print("unary operation \(op) recognized, placing to back of loop")
+                mutableArrayOfOps.removeFirst()
+                mutableArrayOfOps.append("=")
+                mutableArrayOfOps.append(String(op))
+            } else if op as! String == "(" || op as! String == ")" {
+                print("\(op), dropped parenthesis loop")
+            }
+        }
+        return mutableArrayOfOps
+    }
+    
     var program: PropertyList {
         get {
             var operationString = ""
@@ -187,21 +206,12 @@ class CalculatorBrain {
         }
         set {
             clearDisplay()
-            
             if let arrayOfOps = newValue as? [AnyObject] {
-                var mutableArrayOfOps = arrayOfOps
-                if mutableArrayOfOps[0] as! String == "√" {
-                    print("sqrt of expression recognized, placing to back of loop")
-                    mutableArrayOfOps.removeFirst()
-                    mutableArrayOfOps.append("=")
-                    mutableArrayOfOps.append("√")
-                }
-                for op in mutableArrayOfOps {
+                let sanitizedArrayOfOps = sanitizeProgramArray(arrayOfOps)
+                for op in sanitizedArrayOfOps {
                     if let operand = op as? Double {
                         setOperand(operand)
                         print("\(op), loop 1")
-                    } else if op as! String == "(" || op as! String == ")" {
-                        print("\(op), dropped parenthesis loop")
                     } else if let variableOrOperation = op as? String {
                         print("\(op), loop 2")
                         print("\(op), \(variableValues["/(op)"])")
