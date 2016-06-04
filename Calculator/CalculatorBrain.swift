@@ -25,6 +25,7 @@ class CalculatorBrain {
     func variableUpdated() {
         pendingImplicitOperation = false
         updateProgram()
+        performOperation("=")
     }
     
     func setOperand(variable: String) {

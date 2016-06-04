@@ -98,6 +98,7 @@ class ViewController: UIViewController {
     
     private func updateDisplay() {
             descrip!.text! = String(brain.program)
+            displayValue = brain.result
     }
     
     @IBOutlet private weak var display: UILabel!
