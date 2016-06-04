@@ -62,7 +62,8 @@ class CalculatorBrain {
         "−" : Operation.BinaryOperation({ $0 - $1 }),
         "=" : Operation.Equals,
         "clear" : Operation.Clear,
-        "clear display" : Operation.ClearDisplay
+        "clear display" : Operation.ClearDisplay,
+        "undo": Operation.Undo
     ]
     
     private var unaryOperations: Set<String> = [
@@ -77,6 +78,7 @@ class CalculatorBrain {
         case Equals
         case Clear
         case ClearDisplay
+        case Undo
     }
     
     func performOperation(symbol: String) {
@@ -120,6 +122,16 @@ class CalculatorBrain {
                 
             case .ClearDisplay:
                 clearDisplay()
+                
+            case .Undo:
+                if history.count > 1 {
+                    history.removeLast() // to remove 'undo' from history
+                    history.removeLast()
+                    print("undo triggered")
+                    updateProgram()
+                } else {
+                    clearDisplay()
+                }
             }
         if pending == nil {isPartialResult = false
         } else {isPartialResult = true}

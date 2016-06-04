@@ -96,6 +96,9 @@ class ViewController: UIViewController {
             } else {
                 displayValue = 0
             }
+        } else {
+            performOperation(sender)
+            updateDisplay()
         }
     }
     
