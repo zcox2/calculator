@@ -30,18 +30,22 @@ class ViewController: UIViewController {
             return Double(display.text!)!
         }
         set {
-            if String(newValue).hasSuffix(".0"){
-                display.text = String(Int(newValue))
-            } else {
-                display.text = String(newValue)
-            }
-            let formatter = NSNumberFormatter()
-            formatter.maximumFractionDigits = 6
-            display.text = formatter.stringFromNumber(NSNumber(double: newValue))
+            display.text = formatDisplayValue(newValue)
         }
     }
 
-  
+    private func formatDisplayValue(value: Double) -> String {
+        var displayValueAsString = ""
+        if String(value).hasSuffix(".0"){
+            displayValueAsString = String(Int(value))
+        } else {
+            displayValueAsString = String(value)
+        }
+        let formatter = NSNumberFormatter()
+        formatter.maximumFractionDigits = 6
+        displayValueAsString = formatter.stringFromNumber(NSNumber(double: value))!
+        return displayValueAsString
+    }
     
     var savedProgram: CalculatorBrain.PropertyList?
     
@@ -80,6 +84,21 @@ class ViewController: UIViewController {
         updateDisplay()
     }
     
+    @IBAction func undo(sender: UIButton) {
+        if userIsInTheMiddleOfTyping {
+            let currentDisplay = formatDisplayValue(displayValue)
+                // updates displayValue to what the user sees
+            
+            var newDisplay = currentDisplay.characters
+            newDisplay.removeLast()
+            if let newDisplayAsDouble = Double(String(newDisplay)) {
+                displayValue = newDisplayAsDouble
+            } else {
+                displayValue = 0
+            }
+        }
+    }
+    
     private var brain = CalculatorBrain()
     
     @IBAction private func performOperation(sender: UIButton) {
@@ -93,7 +112,6 @@ class ViewController: UIViewController {
             displayValue = brain.result
         }
         updateDisplay()
-        
     }
     
     private func updateDisplay() {
