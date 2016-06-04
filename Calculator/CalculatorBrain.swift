@@ -32,14 +32,12 @@ class CalculatorBrain {
     
     func setOperand(variable: String) {
         if let variableValue = variableValues[variable] { // variable is set to a value
-            print("\(variable) set to \(variableValue)")
             accumulator = variableValue
             internalProgram.append(variable)
         } else { // variable is unset
             pendingImplicitOperation = true
             accumulator = 0.0
             internalProgram.append(variable)
-            print("variable \(variable) accessed as zero, pendingImplicitOperation is \(pendingImplicitOperation)")
         }
         history.append(variable)
     }
@@ -106,16 +104,11 @@ class CalculatorBrain {
                 
             case .Equals:
                 executePendingBinaryOperation()
-                if pendingImplicitOperation {
-                    var internalProgramString = ""
-                    for item in internalProgram {
-                        internalProgramString += String(item) + " "
-                    }
-                    print(internalProgramString)
-                }
+                var historyString = ""
                 for op in history {
-                    print(String(op))
+                    historyString += String(op) + " "
                 }
+                print(historyString)
                 
             case .Clear:
                 clear()
@@ -127,7 +120,6 @@ class CalculatorBrain {
                 if history.count > 1 {
                     history.removeLast() // to remove 'undo' from history
                     history.removeLast()
-                    print("undo triggered")
                     updateProgram()
                 } else {
                     clearDisplay()
