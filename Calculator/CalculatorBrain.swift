@@ -22,6 +22,18 @@ class CalculatorBrain {
         accumulator = operand
         internalProgram.append(operand)
     }
+    func variableUpdated() {
+        if variableValues.count == 0 {
+            print("variableValues has no items")
+            print("pendingImplicitOperation is \(pendingImplicitOperation)")
+        } else {
+            print("variableValues has \(variableValues.count) items")
+            pendingImplicitOperation = false
+            print("pendingImplicitOperation is \(pendingImplicitOperation)")
+            updateProgram()
+        }
+        
+    }
     
     func setOperand(variable: String) {
         if let variableValue = variableValues[variable] {
@@ -30,13 +42,13 @@ class CalculatorBrain {
             internalProgram.append(variable)
             if pendingImplicitOperation {
                 program = internalProgram
-                print("tick")
+                print("variable \(variable) accessed with value \(variableValue), program is rerun")
             }
         } else {
             pendingImplicitOperation = true
             accumulator = 0.0
             internalProgram.append(variable)
-            print("tock")
+            print("variable \(variable) accessed as zero, pendingImplicitOperation is \(pendingImplicitOperation)")
         }
         
     }
@@ -102,8 +114,17 @@ class CalculatorBrain {
                         internalProgramString += String(item) + " "
                     }
                     print(internalProgramString)
-
+                    
                 }
+                //                if variableValues.count == 0 {
+                //                    print("variableValues has no items")
+                //                    print("pendingImplicitOperation is \(pendingImplicitOperation)")
+                //                } else {
+                //                    print("variableValues has \(variableValues.count) items")
+                //                    pendingImplicitOperation = false
+                //                    print("pendingImplicitOperation is \(pendingImplicitOperation)")
+                //                    updateProgram()
+                //                }
                 
             case .Clear:
                 clear()
@@ -166,14 +187,21 @@ class CalculatorBrain {
         }
         set {
             clearDisplay()
+            
             if let arrayOfOps = newValue as? [AnyObject] {
-                for op in arrayOfOps {
-                    
+                var mutableArrayOfOps = arrayOfOps
+                if mutableArrayOfOps[0] as! String == "√" {
+                    print("sqrt of expression recognized, placing to back of loop")
+                    mutableArrayOfOps.removeFirst()
+                    mutableArrayOfOps.append("=")
+                    mutableArrayOfOps.append("√")
+                }
+                for op in mutableArrayOfOps {
                     if let operand = op as? Double {
                         setOperand(operand)
                         print("\(op), loop 1")
                     } else if op as! String == "(" || op as! String == ")" {
-                        
+                        print("\(op), dropped parenthesis loop")
                     } else if let variableOrOperation = op as? String {
                         print("\(op), loop 2")
                         print("\(op), \(variableValues["/(op)"])")
@@ -193,14 +221,14 @@ class CalculatorBrain {
                     }
                     
                 }
-
+                
             }
         }
     }
     
     var result: Double {
         get {
-           
+            
             return accumulator
         }
     }

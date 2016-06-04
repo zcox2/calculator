@@ -60,8 +60,8 @@ class ViewController: UIViewController {
     @IBAction func setVar(sender: UIButton) {
         let variableName = String(sender.currentTitle!.characters.dropFirst())
         brain.variableValues[variableName] = displayValue
-        print("\(variableName) set to \(brain.variableValues[variableName]!)")
-        brain.updateProgram()
+        brain.variableUpdated()
+        updateDisplay()
         userIsInTheMiddleOfTyping = false
     }
     
