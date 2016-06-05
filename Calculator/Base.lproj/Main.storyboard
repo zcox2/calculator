@@ -289,7 +289,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pt2-Rg-M1R">
                                                         <rect key="frame" x="0.0" y="0.0" width="180" height="66"/>
                                                         <color key="backgroundColor" red="1" green="0.70968436589999995" blue="0.36943163350000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                         <state key="normal" title="clear display"/>
                                                         <connections>
                                                             <action selector="clearDisplay:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wxQ-gO-NcF"/>
