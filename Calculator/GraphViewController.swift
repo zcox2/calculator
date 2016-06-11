@@ -10,8 +10,6 @@ import UIKit
 
 class GraphViewController: UIViewController {
 
-    
-    
     @IBOutlet weak var graphView: GraphView! {
         didSet {
             updateUI()
@@ -29,7 +27,6 @@ class GraphViewController: UIViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
-        graphView.graphWithSlope(-4.3)
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,16 +35,45 @@ class GraphViewController: UIViewController {
     }
     
 
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        var destinationVC = segue.destinationViewController
+        
+        if let navcon = destinationVC as? UINavigationController {
+            destinationVC = navcon.visibleViewController ?? destinationVC
+        }
+        if let calculatorVC = destinationVC as? CalculatorViewController {
+            if segue.identifier == "graph" {
+                
+                print(calculatorVC.descrip?.text ?? "No program")
+                
+                if calculatorVC.descrip.text != nil {
+                    calculatorVC.navigationItem.title = calculatorVC.descrip.text
+                }
+            }
+        }
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
         
     }
+    
+//    var destinationvc = segue.destinationViewController
+//    if let navcon = destinationvc as? UINavigationController {
+//        destinationvc = navcon.visibleViewController ?? destinationvc
+//    }
+//    if let facevc = destinationvc as? FaceViewController {
+//        if let identifier = segue.identifier {
+//            if let expression = emotionalFaces[identifier] {
+//                facevc.expression = expression
+//                if let sendingButton = sender as? UIButton {
+//                    facevc.navigationItem.title = sendingButton.currentTitle
+//                }
+//            }
+//        }
+//    }
+
 
 
 }
