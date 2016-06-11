@@ -59,8 +59,8 @@ class GraphView: UIView {
     let axisDrawer = AxesDrawer()
     
     override func drawRect(rect: CGRect) {
-        
-        axisDrawer.drawAxesInRect(bounds, origin: CGPoint(x: origin.x, y: origin.y), pointsPerUnit: pointsPerUnit)
+        axisDrawer.contentScaleFactor = self.contentScaleFactor
+        axisDrawer.drawAxesInRect(bounds, origin: origin, pointsPerUnit: pointsPerUnit)
         
         let newLine = UIBezierPath()
         newLine.lineWidth = lineWidth
