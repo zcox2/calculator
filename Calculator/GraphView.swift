@@ -20,6 +20,8 @@ class GraphView: UIView {
     
     
     var newPoint = CGPoint(x: 2.6, y: 4.0)
+    var startPoint = CGPoint()
+    var endPoint = CGPoint()
     
     var pointsPerUnit: CGFloat = 50
     var translatedNewPoint = CGPoint()
@@ -27,12 +29,13 @@ class GraphView: UIView {
     var maxRun: CGFloat = 3.5
     var maxRise: CGFloat = 5.3
     
+
     
-    private func translatePoint(point: CGPoint) -> CGPoint {
-        var returnedPoint = CGPoint()
-        returnedPoint.x = point.x * pointsPerUnit
-        returnedPoint.y = point.y * pointsPerUnit
-        return returnedPoint
+    private func pointInGraphView(point: CGPoint) -> CGPoint {
+        return CGPoint(
+            x: origin.x + point.x * pointsPerUnit,
+            y: origin.y - point.y * pointsPerUnit
+        )
     }
     
     func graphWithSlope(slope: Double) {
@@ -47,7 +50,8 @@ class GraphView: UIView {
             y = maxRise
             x = y / m
         }
-        newPoint = CGPoint(x: x, y: y)
+        startPoint = CGPoint(x: -x, y: -y)
+        endPoint = CGPoint(x: x, y: y)
         setNeedsDisplay()
     }
     
@@ -64,15 +68,9 @@ class GraphView: UIView {
         newLine.lineWidth = lineWidth
         lineColor.setStroke()
         
-        newLine.moveToPoint(CGPoint(
-            x: bounds.midX,
-            y: bounds.midY)
-        )
-        newLine.addLineToPoint(CGPoint(
-            x: origin.x + newPoint.x * pointsPerUnit,
-            y: origin.y - newPoint.y * pointsPerUnit)
-        )
-        //newLine.addLineToPoint(CGPoint(x: translatePoint(newPoint).x, y: translatePoint(newPoint).y))
+        newLine.moveToPoint(pointInGraphView(startPoint))
+        newLine.addLineToPoint(pointInGraphView(endPoint))
+        
         newLine.stroke()
     }
 
