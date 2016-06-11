@@ -9,6 +9,10 @@
 import UIKit
 
 class GraphViewController: UIViewController {
+    
+
+    var slope: Double = 0.0
+
 
     @IBOutlet weak var graphView: GraphView! {
         didSet {
@@ -16,17 +20,20 @@ class GraphViewController: UIViewController {
         }
     }
     
-    private func updateUI() {
+    func updateUI() {
         graphView.setNeedsDisplay()
     }
     
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(animated: Bool) {
+        graphView.graphWithSlope(slope)
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,30 +41,8 @@ class GraphViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        var destinationVC = segue.destinationViewController
-        
-        if let navcon = destinationVC as? UINavigationController {
-            destinationVC = navcon.visibleViewController ?? destinationVC
-        }
-        if let calculatorVC = destinationVC as? CalculatorViewController {
-            if segue.identifier == "graph" {
-                
-                print(calculatorVC.descrip?.text ?? "No program")
-                
-                if calculatorVC.descrip.text != nil {
-                    calculatorVC.navigationItem.title = calculatorVC.descrip.text
-                }
-            }
-        }
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
-        
-    }
+  
     
 //    var destinationvc = segue.destinationViewController
 //    if let navcon = destinationvc as? UINavigationController {

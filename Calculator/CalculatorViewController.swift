@@ -125,6 +125,30 @@ class CalculatorViewController: UIViewController {
     @IBOutlet private weak var display: UILabel!
     
     @IBOutlet weak var descrip: UILabel!
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        var destinationVC = segue.destinationViewController
+        
+        if let navcon = destinationVC as? UINavigationController {
+            destinationVC = navcon.visibleViewController ?? destinationVC
+        }
+        if let graphVC = destinationVC as? GraphViewController {
+            if segue.identifier == "graph" {
+                graphVC.slope = displayValue
+                
+                if self.descrip.text != nil {
+                    graphVC.navigationItem.title = "Slope = " + String(displayValue)
+                }
+            }
+        }
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        
+        
+    }
+
 
 }
 
