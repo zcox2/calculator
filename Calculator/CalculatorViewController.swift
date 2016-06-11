@@ -118,7 +118,7 @@ class CalculatorViewController: UIViewController {
     }
     
     private func updateDisplay() {
-            descrip!.text! = String(brain.program)
+            descrip!.text! = brain.programAsString()
             displayValue = brain.result
     }
     

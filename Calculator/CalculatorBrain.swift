@@ -80,7 +80,8 @@ class CalculatorBrain {
     }
     
     func performOperation(symbol: String) {
-        history.append(symbol)
+            history.append(symbol)
+
         isCleared = false
         if let operation = operations[symbol] {
             switch operation {
@@ -166,17 +167,7 @@ class CalculatorBrain {
     var program: PropertyList {
         get {
             // -> Adds indicators to end of display to show the status of the calculator
-            var operationString = ""
-            for op in internalProgram {
-                operationString += String(op)
-            }
-            if isPartialResult == true {
-                return operationString + ("...")
-            } else if isCleared {
-                return operationString + (" ")
-            } else {
-                return operationString + ("=")
-            }
+            return history
         }
         set {
             clearDisplay()
@@ -198,6 +189,27 @@ class CalculatorBrain {
                 }
             }
         }
+    }
+    
+    func programAsString() -> String {
+       
+        var operationString = ""
+        
+        if let programArray = program as? [AnyObject] {
+            for op in programArray {
+                if String(op) != "=" {
+                    operationString += String(op)
+                }
+            }
+            if isPartialResult == true {
+                return operationString + ("...")
+            } else if isCleared {
+                return operationString + (" ")
+            } else {
+                return operationString + ("=")
+            }
+        } else {return operationString}
+        
     }
     
     var result: Double {
