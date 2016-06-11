@@ -19,17 +19,12 @@ class GraphView: UIView {
     }
     
     
-    var newPoint = CGPoint(x: 2.6, y: 4.0)
     var startPoint = CGPoint()
     var endPoint = CGPoint()
     
     var pointsPerUnit: CGFloat = 50
     var translatedNewPoint = CGPoint()
     
-    var maxRun: CGFloat = 3.5
-    var maxRise: CGFloat = 5.3
-    
-
     
     private func pointInGraphView(point: CGPoint) -> CGPoint {
         return CGPoint(
@@ -43,11 +38,14 @@ class GraphView: UIView {
         var x = CGFloat()
         var y = CGFloat()
         
-        if m <= maxRise / maxRun {
-            x = maxRun
+        let maxX = bounds.width / 2 / pointsPerUnit
+        let maxY = bounds.height / 2 / pointsPerUnit
+        
+        if m <= maxY / maxX {
+            x = maxX
             y = x * m
         } else {
-            y = maxRise
+            y = maxY
             x = y / m
         }
         startPoint = CGPoint(x: -x, y: -y)

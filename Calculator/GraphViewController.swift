@@ -20,7 +20,6 @@ class GraphViewController: UIViewController {
     
     private func updateUI() {
         graphView.setNeedsDisplay()
-        graphView.graphWithSlope(-1.3)
     }
     
     override func viewDidLoad() {
@@ -30,7 +29,7 @@ class GraphViewController: UIViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
-        
+        graphView.graphWithSlope(-4.3)
     }
 
     override func didReceiveMemoryWarning() {
