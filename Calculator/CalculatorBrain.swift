@@ -14,7 +14,6 @@ class CalculatorBrain {
     private var accumulator = 0.0
     private var internalProgram = [AnyObject]()
     private var isPartialResult = false
-    private var isCleared = true
     private var pendingImplicitOperation = false
     private var history = [AnyObject]()
     
@@ -24,9 +23,7 @@ class CalculatorBrain {
         internalProgram.append(operand)
         history.append(operand)
     }
-    func variableUpdated() {
-        
-    }
+
     
     func setOperand(variable: String) {
         if let variableValue = variableValues[variable] { // variable is set to a value
@@ -48,7 +45,9 @@ class CalculatorBrain {
         didSet {
             pendingImplicitOperation = false
             updateProgram()
-            performOperation("=")
+            if variableValues.count > 0 {
+                performOperation("=")
+            }
         }
     }
     
@@ -68,10 +67,6 @@ class CalculatorBrain {
         "undo": Operation.Undo
     ]
     
-    private var unaryOperations: Set<String> = [
-        "cos",
-        "√"
-    ]
     
     private enum Operation {
         case Constant(Double)
@@ -85,8 +80,6 @@ class CalculatorBrain {
     
     func performOperation(symbol: String) {
             history.append(symbol)
-
-        isCleared = false
         if let operation = operations[symbol] {
             switch operation {
                 
@@ -135,7 +128,6 @@ class CalculatorBrain {
     
     private func clear() {
         history.removeAll()
-        isCleared = true
         pending = nil
         accumulator = 0
         internalProgram.removeAll()
@@ -144,7 +136,6 @@ class CalculatorBrain {
     
     func clearDisplay() {
         history.removeAll()
-        isCleared = true
         pending = nil
         accumulator = 0
         internalProgram.removeAll()
@@ -203,14 +194,43 @@ class CalculatorBrain {
         var operationString = ""
         
         if let programArray = program as? [AnyObject] {
-            for op in programArray {
-                if String(op) != "=" {
-                    operationString += String(op)
+//            for op in programArray {
+//                if String(op) != "=" {
+//                    operationString += String(op)
+//                }
+//            }
+            if programArray.count > 1 {
+                for i in 0 ..< programArray.count - 1 {
+                    let op = programArray[i]
+                    if op as? String == "=" {
+                        operationString = "(\(operationString))"
+                    } else if let operation = operations[String(op)] {
+                        switch operation {
+                        case .UnaryOperation( _):
+                            operationString = String(op) + operationString
+                        case .Constant( _):
+                            operationString += String(op)
+                            break
+                            
+                        case .BinaryOperation( _):
+                            operationString += String(op)
+                            break
+                            
+                        case .Equals:
+                            break
+                            
+                        default: break
+                        }
+                        
+                    } else {
+                        operationString += String(op)
+                    }
                 }
             }
+            
             if isPartialResult == true {
                 return operationString + ("...")
-            } else if isCleared {
+            } else if history.count < 1 {
                 return operationString + (" ")
             } else {
                 return operationString + ("=")

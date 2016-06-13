@@ -128,6 +128,13 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var descrip: UILabel!
     
     
+    @IBAction func printProgramToConsole(sender: UIButton) {
+        if let brainProgram = brain.program as? [AnyObject] {
+            for item in brainProgram {
+                print(item)
+            }
+        }
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         

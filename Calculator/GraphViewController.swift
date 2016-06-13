@@ -11,7 +11,6 @@ import UIKit
 class GraphViewController: UIViewController {
     var slope: Double = 0.0
     var operation: (Double) -> Double = (sin)
-    var brain: CalculatorBrain? = nil
     var program = [AnyObject]()
 
 
