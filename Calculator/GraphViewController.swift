@@ -14,6 +14,7 @@ class GraphViewController: UIViewController {
 
 
     @IBAction func setNewOrigin(tapRecognizer: UITapGestureRecognizer) {
+        tapRecognizer.numberOfTapsRequired = 2
         print(tapRecognizer.locationInView(graphView))
         graphView.origin = tapRecognizer.locationInView(graphView)
         updateUI()
@@ -38,6 +39,10 @@ class GraphViewController: UIViewController {
             graphView.addGestureRecognizer(UIPinchGestureRecognizer(
                 target: graphView, action: #selector(GraphView.changeScale(_:))
                 ))
+            
+            graphView.addGestureRecognizer(UIPanGestureRecognizer(
+                target: graphView, action: #selector(GraphView.panOrigin(_:) )
+                ))
         }
     }
     
@@ -48,6 +53,7 @@ class GraphViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        graphView.origin = CGPoint(x: graphView.bounds.midX, y: graphView.bounds.midY)
         // Do any additional setup after loading the view.
         
     }
