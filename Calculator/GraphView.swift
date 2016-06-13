@@ -18,6 +18,7 @@ class GraphView: UIView {
         }
     }
     
+    var operation: (Double) -> Double = {_ in return 0}
     
     var startPoint = CGPoint()
     var endPoint = CGPoint()
@@ -53,17 +54,39 @@ class GraphView: UIView {
         setNeedsDisplay()
     }
     func graphWithOperation(operation: (CGFloat) -> CGFloat) {
-        
+        var i = 0
         let x = CGFloat(3.14)
         let y = operation(x)
+        
         print(y)
         print(String(operation))
         
-//        let maxX = bounds.width / 2 / pointsPerUnit
-//        let maxY = bounds.height / 2 / pointsPerUnit
+        
+    }
+    
+    func graphIt() -> UIBezierPath {
+
+        
+        let maxX = bounds.width / 2 / pointsPerUnit // maxX is in graph units
+        // let maxY = bounds.height / 2 / pointsPerUnit // maxY is in graph units
+        var x = -Double(maxX)
+        var y = operation(x)
         
         
-        
+        let line = UIBezierPath()
+        line.lineWidth = lineWidth
+        lineColor.setStroke()
+        line.moveToPoint(pointInGraphView(CGPoint(x: x, y: y)))
+        print("width: \(bounds.width), height: \(bounds.height)")
+        print("max x:\(x) , max y:\(y) at \(pointInGraphView(CGPoint(x: x, y: y)).x) , \(pointInGraphView(CGPoint(x: x, y: y)).y)")
+        while(x < Double(maxX)) {
+            x += 1 / Double(pointsPerUnit)
+            y = operation(x)
+            line.addLineToPoint(pointInGraphView(CGPoint(x: x, y: y)))
+            print("\(pointInGraphView(CGPoint(x: x, y: y)).x), \(pointInGraphView(CGPoint(x: x, y: y)).y)")
+        }
+        print("min x:\(x) , min y:\(y)")
+        return line
     }
     
     private enum Operation {
@@ -85,14 +108,17 @@ class GraphView: UIView {
         axisDrawer.contentScaleFactor = self.contentScaleFactor
         axisDrawer.drawAxesInRect(bounds, origin: origin, pointsPerUnit: pointsPerUnit)
         
-        let newLine = UIBezierPath()
-        newLine.lineWidth = lineWidth
-        lineColor.setStroke()
-        
-        newLine.moveToPoint(pointInGraphView(startPoint))
-        newLine.addLineToPoint(pointInGraphView(endPoint))
-        
-        newLine.stroke()
+//        let newLine = UIBezierPath()
+//        newLine.lineWidth = lineWidth
+//        lineColor.setStroke()
+//        
+//        newLine.moveToPoint(pointInGraphView(startPoint))
+//        newLine.addLineToPoint(pointInGraphView(endPoint))
+//        
+//        newLine.stroke()
+        let line = graphIt()
+        line.stroke()
+       
     }
 
 

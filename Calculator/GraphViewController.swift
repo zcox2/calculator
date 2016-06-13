@@ -12,7 +12,7 @@ class GraphViewController: UIViewController {
     
 
     var slope: Double = 0.0
-    var operation: (CGFloat) -> (CGFloat) = (sin)
+    var operation: (Double) -> Double = (sin)
 
 
 
@@ -23,7 +23,7 @@ class GraphViewController: UIViewController {
     }
     
     func updateUI() {
-        graphView.graphWithOperation(operation)
+        graphView.operation = operation
         graphView.setNeedsDisplay()
     }
     

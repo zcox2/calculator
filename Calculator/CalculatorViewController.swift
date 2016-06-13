@@ -124,9 +124,6 @@ class CalculatorViewController: UIViewController {
     
     @IBOutlet private weak var display: UILabel!
     
-    func Cos(x: CGFloat) -> (CGFloat) {
-        return CGFloat(cos(Double(x)))
-    }
     
     @IBOutlet weak var descrip: UILabel!
     
@@ -142,7 +139,7 @@ class CalculatorViewController: UIViewController {
         if let graphVC = destinationVC as? GraphViewController {
             if segue.identifier == "graph" {
                 graphVC.slope = displayValue
-                graphVC.operation = Cos
+                graphVC.operation = cos
                 if self.descrip.text != nil {
                     graphVC.navigationItem.title = "Slope = " + String(displayValue)
                 }
