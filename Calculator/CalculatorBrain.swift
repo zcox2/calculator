@@ -12,7 +12,6 @@ import Foundation
 class CalculatorBrain {
     
     private var accumulator = 0.0
-    private var internalProgram = [AnyObject]()
     private var isPartialResult = false
     private var pendingImplicitOperation = false
     private var history = [AnyObject]()
@@ -20,19 +19,15 @@ class CalculatorBrain {
     
     func setOperand(operand: Double) {
         accumulator = operand
-        internalProgram.append(operand)
         history.append(operand)
     }
-    
     
     func setOperand(variable: String) {
         if let variableValue = variableValues[variable] { // variable is set to a value
             accumulator = variableValue
-            internalProgram.append(variable)
         } else { // variable is unset
             pendingImplicitOperation = true
             accumulator = 0.0
-            internalProgram.append(variable)
         }
         history.append(variable)
     }
@@ -85,27 +80,17 @@ class CalculatorBrain {
                 
             case .Constant(let value):
                 accumulator = value
-                internalProgram.append(symbol)
                 
             case .UnaryOperation(let function):
                 accumulator = function(accumulator)
-                if isPartialResult == false {
-                    internalProgram.insert("(", atIndex: 0)
-                    internalProgram.append(")")
-                }
-                internalProgram.insert(symbol, atIndex: 0)
                 
             case .BinaryOperation(let function):
                 executePendingBinaryOperation()
                 pending = PendingBinaryOperationInfo(binaryFunction: function, firstOperand: accumulator)
-                internalProgram.append(symbol)
                 
             case .Equals:
                 executePendingBinaryOperation()
-                var historyString = ""
-                for op in history {
-                    historyString += String(op) + " "
-                }
+                
             case .Clear:
                 clear()
                 
@@ -130,7 +115,6 @@ class CalculatorBrain {
         history.removeAll()
         pending = nil
         accumulator = 0
-        internalProgram.removeAll()
         variableValues = [:]
     }
     
@@ -138,7 +122,6 @@ class CalculatorBrain {
         history.removeAll()
         pending = nil
         accumulator = 0
-        internalProgram.removeAll()
     }
     
     private func executePendingBinaryOperation() {
@@ -155,11 +138,6 @@ class CalculatorBrain {
         var firstOperand: Double
     }
     
-    func runProgram(newProgram: [AnyObject]) {
-        history = newProgram
-        updateProgram()
-    }
-    
     typealias PropertyList = [AnyObject]
     
     var program: PropertyList {
@@ -168,8 +146,9 @@ class CalculatorBrain {
         }
         set {
             clearDisplay()
-            let arrayOfOps = newValue
-            for op in arrayOfOps {
+            
+            // run the calculator with new program
+            for op in newValue {
                 if let operand = op as? Double { // if it's an operand
                     setOperand(operand)
                 } else if let variableOrOperation = op as? String {

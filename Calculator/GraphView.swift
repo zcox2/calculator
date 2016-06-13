@@ -61,7 +61,7 @@ class GraphView: UIView {
     }
     func runCalculatorProgram(program: [AnyObject]) -> UIBezierPath {
         graphProgram = program
-        brain.runProgram(program)
+        brain.program = program
         let minX: CGFloat = -origin.x / pointsPerUnit // maxX and minX is in graph units
         let maxX: CGFloat = (bounds.width - origin.x) / pointsPerUnit
         var x = Double(minX)
