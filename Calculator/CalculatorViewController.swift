@@ -12,7 +12,6 @@ class CalculatorViewController: UIViewController {
     
     private var userIsInTheMiddleOfTyping = false
 
-
     @IBAction private func touchDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         

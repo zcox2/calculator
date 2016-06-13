@@ -13,6 +13,11 @@ class GraphViewController: UIViewController {
     var operation: (Double) -> Double = (sin)
 
 
+    @IBAction func setNewOrigin(tapRecognizer: UITapGestureRecognizer) {
+        print(tapRecognizer.locationInView(graphView))
+        graphView.origin = tapRecognizer.locationInView(graphView)
+        updateUI()
+    }
 
     @IBOutlet weak var graphView: GraphView! {
         didSet {

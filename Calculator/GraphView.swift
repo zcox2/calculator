@@ -15,8 +15,13 @@ class GraphView: UIView {
     var origin: CGPoint {
         get {
             return CGPoint(x: bounds.midX, y: bounds.midY)
+        } set {
+            newOrigin = newValue
+            originHasChanged = true
         }
     }
+    var newOrigin = CGPoint()
+    var originHasChanged = false
     
     var operation: (Double) -> Double = {_ in return 0}
     
@@ -28,10 +33,18 @@ class GraphView: UIView {
     
     
     private func pointInGraphView(point: CGPoint) -> CGPoint {
-        return CGPoint(
-            x: origin.x + point.x * pointsPerUnit,
-            y: origin.y - point.y * pointsPerUnit
-        )
+        if originHasChanged {
+            return CGPoint(
+                x: newOrigin.x + point.x * pointsPerUnit,
+                y: newOrigin.y - point.y * pointsPerUnit
+            )
+        } else {
+            return CGPoint(
+                x: origin.x + point.x * pointsPerUnit,
+                y: origin.y - point.y * pointsPerUnit
+            )
+        }
+        
     }
     
     func generateLineFromStoredOperation() -> UIBezierPath {
@@ -49,19 +62,19 @@ class GraphView: UIView {
         }
         return line
     }
-
+    
     let axisDrawer = AxesDrawer()
     
     override func drawRect(rect: CGRect) {
         axisDrawer.contentScaleFactor = self.contentScaleFactor
         axisDrawer.drawAxesInRect(bounds, origin: origin, pointsPerUnit: pointsPerUnit)
-
+        
         let line = generateLineFromStoredOperation()
         
         line.lineWidth = lineWidth
         lineColor.setStroke()
         line.stroke()
     }
-
-
+    
+    
 }
