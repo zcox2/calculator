@@ -23,7 +23,7 @@ class CalculatorBrain {
         internalProgram.append(operand)
         history.append(operand)
     }
-
+    
     
     func setOperand(variable: String) {
         if let variableValue = variableValues[variable] { // variable is set to a value
@@ -79,7 +79,7 @@ class CalculatorBrain {
     }
     
     func performOperation(symbol: String) {
-            history.append(symbol)
+        history.append(symbol)
         if let operation = operations[symbol] {
             switch operation {
                 
@@ -121,8 +121,8 @@ class CalculatorBrain {
                     clearDisplay()
                 }
             }
-        if pending == nil {isPartialResult = false
-        } else {isPartialResult = true}
+            if pending == nil {isPartialResult = false
+            } else {isPartialResult = true}
         }
     }
     
@@ -160,83 +160,75 @@ class CalculatorBrain {
         updateProgram()
     }
     
-    typealias PropertyList = AnyObject
+    typealias PropertyList = [AnyObject]
     
     var program: PropertyList {
         get {
-            // -> Adds indicators to end of display to show the status of the calculator
             return history
         }
         set {
             clearDisplay()
-            if let arrayOfOps = newValue as? [AnyObject] {
-                for op in arrayOfOps {
-                    if let operand = op as? Double { // if it's an operand
-                        setOperand(operand)
-                    } else if let variableOrOperation = op as? String {
-                        if variableValues[variableOrOperation] != nil { // if it's a variable
-                            pendingImplicitOperation = false
-                            setOperand(variableOrOperation)
-                        } else if operations[variableOrOperation] != nil { // if it's an operation
-                            let operation = variableOrOperation
-                            performOperation(operation)
-                        } else { // it's a variable, but is unset
-                            setOperand(variableOrOperation)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func programAsString() -> String {
-       
-        var operationString = ""
-        
-        if let programArray = program as? [AnyObject] {
-//            for op in programArray {
-//                if String(op) != "=" {
-//                    operationString += String(op)
-//                }
-//            }
-            var mutableProgramArray = programArray
-            if programArray.count > 1 {
-                if programArray[programArray.count-1] as? String == "=" {
-                    mutableProgramArray.removeLast()
-                }
-                
-                for i in 0 ..< mutableProgramArray.count {
-                    let op = programArray[i]
-                    if let operation = operations[String(op)] {
-                        switch operation {
-                        case .UnaryOperation( _):
-                            operationString = String(op) + operationString
-                        case .Constant( _):
-                            operationString += String(op)
-                            
-                        case .BinaryOperation( _):
-                            operationString += String(op)
-                            
-                        case .Equals:
-                            operationString = "(\(operationString))"
-                            
-                        default: break
-                        }
-                        
-                    } else {
-                        operationString += String(op)
+            let arrayOfOps = newValue
+            for op in arrayOfOps {
+                if let operand = op as? Double { // if it's an operand
+                    setOperand(operand)
+                } else if let variableOrOperation = op as? String {
+                    if variableValues[variableOrOperation] != nil { // if it's a variable
+                        pendingImplicitOperation = false
+                        setOperand(variableOrOperation)
+                    } else if operations[variableOrOperation] != nil { // if it's an operation
+                        let operation = variableOrOperation
+                        performOperation(operation)
+                    } else { // it's a variable, but is unset
+                        setOperand(variableOrOperation)
                     }
                 }
             }
             
-            if isPartialResult == true {
-                return operationString + ("...")
-            } else if history.count < 1 {
-                return operationString + (" ")
-            } else {
-                return operationString + ("=")
+        }
+    }
+    
+    func programAsString() -> String {
+        
+        var operationString = ""
+        var programArray = program
+        
+        if programArray.count > 1 {
+            if programArray[programArray.count-1] as? String == "=" { // remove last equals sign
+                programArray.removeLast()
             }
-        } else {return operationString}
+            
+            for i in 0 ..< programArray.count {
+                let op = programArray[i]
+                if let operation = operations[String(op)] {
+                    switch operation {
+                    case .UnaryOperation( _):
+                        operationString = String(op) + operationString
+                    case .Constant( _):
+                        operationString += String(op)
+                        
+                    case .BinaryOperation( _):
+                        operationString += String(op)
+                        
+                    case .Equals:
+                        operationString = "(\(operationString))"
+                        
+                    default: break
+                    }
+                    
+                } else {
+                    operationString += String(op)
+                }
+            }
+        }
+        
+        if isPartialResult == true {
+            return operationString + ("...")
+        } else if history.count < 1 {
+            return operationString + (" ")
+        } else {
+            return operationString + ("=")
+        }
         
     }
     

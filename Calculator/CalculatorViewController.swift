@@ -12,7 +12,7 @@ class CalculatorViewController: UIViewController {
     
     private var userIsInTheMiddleOfTyping = false
     
-
+    
     @IBAction private func touchDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         
@@ -34,7 +34,7 @@ class CalculatorViewController: UIViewController {
             display.text = formatDisplayValue(newValue)
         }
     }
-
+    
     private func formatDisplayValue(value: Double) -> String {
         var displayValueAsString = ""
         if String(value).hasSuffix(".0"){
@@ -53,7 +53,7 @@ class CalculatorViewController: UIViewController {
     @IBAction func save() {
         savedProgram = brain.program
     }
-
+    
     @IBAction func restore() {
         if savedProgram != nil {
             brain.program = savedProgram!
@@ -87,7 +87,7 @@ class CalculatorViewController: UIViewController {
     @IBAction func undo(sender: UIButton) {
         if userIsInTheMiddleOfTyping {
             let currentDisplay = formatDisplayValue(displayValue)
-                // updates displayValue to what the user sees
+            // updates displayValue to what the user sees
             
             var newDisplay = currentDisplay.characters
             newDisplay.removeLast()
@@ -118,8 +118,8 @@ class CalculatorViewController: UIViewController {
     }
     
     private func updateDisplay() {
-            descrip!.text! = brain.programAsString()
-            displayValue = brain.result
+        descrip!.text! = brain.programAsString()
+        displayValue = brain.result
     }
     
     @IBOutlet private weak var display: UILabel!
@@ -129,10 +129,8 @@ class CalculatorViewController: UIViewController {
     
     
     @IBAction func printProgramToConsole(sender: UIButton) {
-        if let brainProgram = brain.program as? [AnyObject] {
-            for item in brainProgram {
-                print(item)
-            }
+        for item in brain.program {
+            print(item)
         }
     }
     
@@ -147,20 +145,17 @@ class CalculatorViewController: UIViewController {
         if let graphVC = destinationVC as? GraphViewController {
             if segue.identifier == "graph" {
                 graphVC.slope = displayValue
-                graphVC.program = brain.program as? [AnyObject] ?? [0]
-
+                graphVC.program = brain.program
+                
                 
                 if self.descrip.text != nil {
                     graphVC.navigationItem.title = brain.programAsString()
                 }
             }
         }
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
         
     }
-
-
+    
+    
 }
 
