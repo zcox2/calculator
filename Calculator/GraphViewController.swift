@@ -20,26 +20,12 @@ class GraphViewController: UIViewController {
         updateUI()
     }
 
-    @IBAction func zoom(recognizer: UIPinchGestureRecognizer) {
-        switch recognizer.state {
-        case .Changed, .Ended:
-            graphView.pointsPerUnit *= recognizer.scale
-            print(graphView.pointsPerUnit)
-            recognizer.scale = 1.0
-            updateUI()
-        default: break
-        }
-        
-    }
-    
     @IBOutlet weak var graphView: GraphView! {
         didSet {
             updateUI()
-            
             graphView.addGestureRecognizer(UIPinchGestureRecognizer(
                 target: graphView, action: #selector(GraphView.changeScale(_:))
                 ))
-            
             graphView.addGestureRecognizer(UIPanGestureRecognizer(
                 target: graphView, action: #selector(GraphView.panOrigin(_:) )
                 ))
@@ -53,21 +39,11 @@ class GraphViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        graphView.origin = CGPoint(x: graphView.bounds.midX, y: graphView.bounds.midY)
-        // Do any additional setup after loading the view.
-        
-    }
-    deinit {
     }
     
     override func viewDidAppear(animated: Bool) {
+        graphView.origin = CGPoint(x: graphView.bounds.midX, y: graphView.bounds.midY)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 
 }
