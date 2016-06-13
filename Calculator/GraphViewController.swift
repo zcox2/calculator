@@ -19,9 +19,25 @@ class GraphViewController: UIViewController {
         updateUI()
     }
 
+    @IBAction func zoom(recognizer: UIPinchGestureRecognizer) {
+        switch recognizer.state {
+        case .Changed, .Ended:
+            graphView.pointsPerUnit *= recognizer.scale
+            print(graphView.pointsPerUnit)
+            recognizer.scale = 1.0
+            updateUI()
+        default: break
+        }
+        
+    }
+    
     @IBOutlet weak var graphView: GraphView! {
         didSet {
             updateUI()
+            
+            graphView.addGestureRecognizer(UIPinchGestureRecognizer(
+                target: graphView, action: #selector(GraphView.changeScale(_:))
+                ))
         }
     }
     

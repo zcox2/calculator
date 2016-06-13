@@ -28,9 +28,19 @@ class GraphView: UIView {
     var startPoint = CGPoint()
     var endPoint = CGPoint()
     
-    var pointsPerUnit: CGFloat = 50
+    var pointsPerUnit: CGFloat = 50 { didSet { setNeedsDisplay() } }
     var translatedNewPoint = CGPoint()
     
+    func changeScale(recognizer: UIPinchGestureRecognizer) {
+        switch recognizer.state {
+        case .Changed, .Ended:
+            pointsPerUnit *= recognizer.scale
+            print(pointsPerUnit)
+            recognizer.scale = 1.0
+        default:
+            break
+        }
+    }
     
     private func pointInGraphView(point: CGPoint) -> CGPoint {
         if originHasChanged {
