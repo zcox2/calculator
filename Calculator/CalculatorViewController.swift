@@ -11,6 +11,7 @@ import UIKit
 class CalculatorViewController: UIViewController {
     
     private var userIsInTheMiddleOfTyping = false
+    
 
     @IBAction private func touchDigit(sender: UIButton) {
         let digit = sender.currentTitle!
@@ -64,7 +65,6 @@ class CalculatorViewController: UIViewController {
     @IBAction func setVar(sender: UIButton) {
         let variableName = String(sender.currentTitle!.characters.dropFirst())
         brain.variableValues[variableName] = displayValue
-        brain.variableUpdated()
         updateDisplay()
         userIsInTheMiddleOfTyping = false
     }
@@ -140,10 +140,11 @@ class CalculatorViewController: UIViewController {
         if let graphVC = destinationVC as? GraphViewController {
             if segue.identifier == "graph" {
                 graphVC.slope = displayValue
-                graphVC.operation = cos
+                graphVC.program = brain.program as? [AnyObject] ?? [0]
+
                 
                 if self.descrip.text != nil {
-                    graphVC.navigationItem.title = "cos(x)"
+                    graphVC.navigationItem.title = brain.programAsString()
                 }
             }
         }

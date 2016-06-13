@@ -12,6 +12,8 @@ class GraphView: UIView {
     
     var lineWidth: CGFloat = 5.0
     var lineColor = UIColor.blackColor()
+    var graphProgram = [AnyObject]()
+    let brain = CalculatorBrain()
     
     var origin = CGPointZero { didSet { setNeedsDisplay() } }
     var pointsPerUnit: CGFloat = 50 { didSet { setNeedsDisplay() } }
@@ -57,6 +59,37 @@ class GraphView: UIView {
             y: origin.y - point.y * pointsPerUnit
         )
     }
+    func runCalculatorProgram(program: [AnyObject]) -> UIBezierPath {
+        graphProgram = program
+        brain.runProgram(program)
+        let minX: CGFloat = -origin.x / pointsPerUnit // maxX and minX is in graph units
+        let maxX: CGFloat = (bounds.width - origin.x) / pointsPerUnit
+        var x = Double(minX)
+        var y = Double(0)
+        brain.variableValues["x"] = x
+        
+        if brain.result.isNaN {
+            y = 0
+        } else {
+            y = brain.result
+        }
+        
+        let line = UIBezierPath()
+        line.moveToPoint(pointInGraphView(CGPoint(x: x, y: y)))
+        
+        while(x < Double(maxX)) {
+            x += 5 / Double(pointsPerUnit)
+            print("evaluating \(x)")
+            brain.variableValues["x"] = Double(x)
+            if brain.result.isNaN {
+                y = 0
+            } else {
+                y = brain.result
+            }
+            line.addLineToPoint(pointInGraphView(CGPoint(x: x, y: y)))
+        }
+        return line
+    }
     
     func generateLineFromStoredOperation() -> UIBezierPath {
         let minX = -origin.x / pointsPerUnit // maxX and minX is in graph units
@@ -79,11 +112,19 @@ class GraphView: UIView {
         axisDrawer.contentScaleFactor = self.contentScaleFactor
         axisDrawer.drawAxesInRect(bounds, origin: origin, pointsPerUnit: pointsPerUnit)
         
-        let line = generateLineFromStoredOperation()
+        var line = UIBezierPath()
+        
+        if graphProgram.count > 0 {
+            line = runCalculatorProgram(graphProgram)
+        } else {
+            line = generateLineFromStoredOperation()
+        }
         
         line.lineWidth = lineWidth
         lineColor.setStroke()
         line.stroke()
+        
+        
     }
     
     

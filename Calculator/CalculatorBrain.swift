@@ -25,9 +25,7 @@ class CalculatorBrain {
         history.append(operand)
     }
     func variableUpdated() {
-        pendingImplicitOperation = false
-        updateProgram()
-        performOperation("=")
+        
     }
     
     func setOperand(variable: String) {
@@ -46,7 +44,13 @@ class CalculatorBrain {
         program = history
     }
     
-    var variableValues: Dictionary<String, Double> = [:]
+    var variableValues: Dictionary<String, Double> = [:] {
+        didSet {
+            pendingImplicitOperation = false
+            updateProgram()
+            performOperation("=")
+        }
+    }
     
     private var operations: Dictionary<String, Operation> = [
         "π" : Operation.Constant(M_PI), // M_PI,
@@ -109,8 +113,6 @@ class CalculatorBrain {
                 for op in history {
                     historyString += String(op) + " "
                 }
-                print(historyString)
-                
             case .Clear:
                 clear()
                 
@@ -160,6 +162,11 @@ class CalculatorBrain {
     private struct PendingBinaryOperationInfo {
         var binaryFunction: (Double, Double) -> Double
         var firstOperand: Double
+    }
+    
+    func runProgram(newProgram: [AnyObject]) {
+        history = newProgram
+        updateProgram()
     }
     
     typealias PropertyList = AnyObject

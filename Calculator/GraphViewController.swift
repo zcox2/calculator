@@ -11,6 +11,8 @@ import UIKit
 class GraphViewController: UIViewController {
     var slope: Double = 0.0
     var operation: (Double) -> Double = (sin)
+    var brain: CalculatorBrain? = nil
+    var program = [AnyObject]()
 
 
     @IBAction func setNewOrigin(tapRecognizer: UITapGestureRecognizer) {
@@ -22,7 +24,6 @@ class GraphViewController: UIViewController {
 
     @IBOutlet weak var graphView: GraphView! {
         didSet {
-            updateUI()
             graphView.addGestureRecognizer(UIPinchGestureRecognizer(
                 target: graphView, action: #selector(GraphView.changeScale(_:))
                 ))
@@ -34,6 +35,9 @@ class GraphViewController: UIViewController {
     
     func updateUI() {
         graphView.operation = operation
+        if program.count > 0 {
+            graphView.graphProgram = program
+        }
         graphView.setNeedsDisplay()
     }
     
@@ -43,6 +47,7 @@ class GraphViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         graphView.origin = CGPoint(x: graphView.bounds.midX, y: graphView.bounds.midY)
+        updateUI()
     }
 
 
