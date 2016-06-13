@@ -11,8 +11,8 @@
             <objects>
                 <splitViewController id="31z-hx-IVj" sceneMemberID="viewController">
                     <connections>
-                        <segue destination="mKb-05-rbZ" kind="relationship" relationship="masterViewController" id="LCa-DI-ggc"/>
-                        <segue destination="JaM-hZ-0Qa" kind="relationship" relationship="detailViewController" id="M7k-f5-wFb"/>
+                        <segue destination="ZwO-Kc-ije" kind="relationship" relationship="masterViewController" id="oCs-qJ-b7f"/>
+                        <segue destination="IY7-Yb-0dz" kind="relationship" relationship="detailViewController" id="avO-BF-C1D"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vjY-Zl-KcL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -58,7 +58,7 @@
                                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                         <state key="normal" title="graph"/>
                                                         <connections>
-                                                            <segue destination="JaM-hZ-0Qa" kind="show" identifier="graph" id="m8q-4D-wAC"/>
+                                                            <segue destination="IY7-Yb-0dz" kind="showDetail" identifier="graph" id="at8-DD-ANs"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mX0-e7-DST">
@@ -350,7 +350,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1291" y="396"/>
+            <point key="canvasLocation" x="1557" y="346"/>
         </scene>
         <!--Graph View Controller-->
         <scene sceneID="MKP-7j-lbZ">
@@ -384,46 +384,46 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NQD-0P-uHH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1235" y="1160"/>
+            <point key="canvasLocation" x="1501" y="1110"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="hM4-bZ-hTg">
+        <scene sceneID="CI6-Ye-DnC">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JaM-hZ-0Qa" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZwO-Kc-ije" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fwl-KI-En7">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aVi-KD-pvj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="pc4-D2-oYk" kind="relationship" relationship="rootViewController" id="djL-So-py9"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="zHH-ud-HQq"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="V3g-IC-IEJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QfQ-Yr-Rtu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="479" y="1073"/>
+            <point key="canvasLocation" x="745" y="346"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="Vle-dl-z10">
+        <scene sceneID="ftC-qC-s7X">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mKb-05-rbZ" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="IY7-Yb-0dz" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="VNG-HU-A9h">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Exc-4E-uj4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="LN2-iL-5gB"/>
+                        <segue destination="pc4-D2-oYk" kind="relationship" relationship="rootViewController" id="SsO-TE-Lch"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="FNN-Q6-7g5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ugC-yS-Xoc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="479" y="396"/>
+            <point key="canvasLocation" x="689" y="1110"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="m8q-4D-wAC"/>
+        <segue reference="avO-BF-C1D"/>
     </inferredMetricsTieBreakers>
 </document>

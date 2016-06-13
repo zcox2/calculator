@@ -9,11 +9,9 @@
 import UIKit
 
 class GraphViewController: UIViewController {
-    
-
     var slope: Double = 0.0
     var operation: (Double) -> Double = (sin)
-    var numGraphView: Int = 0
+
 
 
     @IBOutlet weak var graphView: GraphView! {
@@ -30,13 +28,9 @@ class GraphViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        numGraphView += 1
-        print(numGraphView)
         
     }
     deinit {
-        numGraphView -= 1
-        print(numGraphView)
     }
     
     override func viewDidAppear(animated: Bool) {
