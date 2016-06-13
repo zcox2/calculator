@@ -199,25 +199,26 @@ class CalculatorBrain {
 //                    operationString += String(op)
 //                }
 //            }
+            var mutableProgramArray = programArray
             if programArray.count > 1 {
-                for i in 0 ..< programArray.count - 1 {
+                if programArray[programArray.count-1] as? String == "=" {
+                    mutableProgramArray.removeLast()
+                }
+                
+                for i in 0 ..< mutableProgramArray.count {
                     let op = programArray[i]
-                    if op as? String == "=" {
-                        operationString = "(\(operationString))"
-                    } else if let operation = operations[String(op)] {
+                    if let operation = operations[String(op)] {
                         switch operation {
                         case .UnaryOperation( _):
                             operationString = String(op) + operationString
                         case .Constant( _):
                             operationString += String(op)
-                            break
                             
                         case .BinaryOperation( _):
                             operationString += String(op)
-                            break
                             
                         case .Equals:
-                            break
+                            operationString = "(\(operationString))"
                             
                         default: break
                         }
