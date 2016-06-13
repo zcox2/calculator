@@ -43,7 +43,6 @@ class GraphViewController: UIViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
-        graphView.graphWithSlope(slope)
     }
 
     override func didReceiveMemoryWarning() {

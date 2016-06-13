@@ -128,6 +128,7 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var descrip: UILabel!
     
     
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         var destinationVC = segue.destinationViewController
@@ -139,9 +140,9 @@ class CalculatorViewController: UIViewController {
         if let graphVC = destinationVC as? GraphViewController {
             if segue.identifier == "graph" {
                 graphVC.slope = displayValue
-                graphVC.operation = cos
+                graphVC.operation = {2 * $0 + 3}
                 if self.descrip.text != nil {
-                    graphVC.navigationItem.title = "Slope = " + String(displayValue)
+                    graphVC.navigationItem.title = "2x + 3"
                 }
             }
         }
