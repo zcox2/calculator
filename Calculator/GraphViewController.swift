@@ -12,6 +12,8 @@ class GraphViewController: UIViewController {
     
 
     var slope: Double = 0.0
+    var operation: (CGFloat) -> (CGFloat) = (sin)
+
 
 
     @IBOutlet weak var graphView: GraphView! {
@@ -21,10 +23,18 @@ class GraphViewController: UIViewController {
     }
     
     func updateUI() {
+        graphView.graphWithOperation(operation)
         graphView.setNeedsDisplay()
     }
     
-    
+//    func graph(operation: (CGFloat) -> (CGFloat)) {
+//        let x = CGFloat(3.14)
+//        let y = operation(x)
+//        print(y)
+//        if graphView != nil {
+//            graphView.graphWithOperation(operation)
+//        }
+//    }
     
     
     override func viewDidLoad() {

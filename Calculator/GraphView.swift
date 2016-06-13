@@ -52,6 +52,29 @@ class GraphView: UIView {
         endPoint = CGPoint(x: x, y: y)
         setNeedsDisplay()
     }
+    func graphWithOperation(operation: (CGFloat) -> CGFloat) {
+        
+        let x = CGFloat(3.14)
+        let y = operation(x)
+        print(y)
+        print(String(operation))
+        
+//        let maxX = bounds.width / 2 / pointsPerUnit
+//        let maxY = bounds.height / 2 / pointsPerUnit
+        
+        
+        
+    }
+    
+    private enum Operation {
+        case Constant(Double)
+        case UnaryOperation((Double) -> Double)
+        case BinaryOperation((Double, Double) -> Double)
+        case Equals
+        case Clear
+        case ClearDisplay
+        case Undo
+    }
     
 
     // Only override drawRect: if you perform custom drawing.
