@@ -13,7 +13,7 @@ class GraphViewController: UIViewController {
 
     var slope: Double = 0.0
     var operation: (Double) -> Double = (sin)
-
+    var numGraphView: Int = 0
 
 
     @IBOutlet weak var graphView: GraphView! {
@@ -27,19 +27,16 @@ class GraphViewController: UIViewController {
         graphView.setNeedsDisplay()
     }
     
-//    func graph(operation: (CGFloat) -> (CGFloat)) {
-//        let x = CGFloat(3.14)
-//        let y = operation(x)
-//        print(y)
-//        if graphView != nil {
-//            graphView.graphWithOperation(operation)
-//        }
-//    }
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        numGraphView += 1
+        print(numGraphView)
+        
+    }
+    deinit {
+        numGraphView -= 1
+        print(numGraphView)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -49,24 +46,6 @@ class GraphViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-  
-    
-//    var destinationvc = segue.destinationViewController
-//    if let navcon = destinationvc as? UINavigationController {
-//        destinationvc = navcon.visibleViewController ?? destinationvc
-//    }
-//    if let facevc = destinationvc as? FaceViewController {
-//        if let identifier = segue.identifier {
-//            if let expression = emotionalFaces[identifier] {
-//                facevc.expression = expression
-//                if let sendingButton = sender as? UIButton {
-//                    facevc.navigationItem.title = sendingButton.currentTitle
-//                }
-//            }
-//        }
-//    }
 
 
 

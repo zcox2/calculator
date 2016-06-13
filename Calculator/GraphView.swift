@@ -46,7 +46,6 @@ class GraphView: UIView {
             x += 1 / Double(pointsPerUnit)
             y = operation(x)
             line.addLineToPoint(pointInGraphView(CGPoint(x: x, y: y)))
-            print("\(pointInGraphView(CGPoint(x: x, y: y)).x), \(pointInGraphView(CGPoint(x: x, y: y)).y)")
         }
         return line
     }
