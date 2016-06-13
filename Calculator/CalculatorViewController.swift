@@ -140,9 +140,10 @@ class CalculatorViewController: UIViewController {
         if let graphVC = destinationVC as? GraphViewController {
             if segue.identifier == "graph" {
                 graphVC.slope = displayValue
-                graphVC.operation = {2 * $0 + 3}
+                graphVC.operation = cos
+                
                 if self.descrip.text != nil {
-                    graphVC.navigationItem.title = "2x + 3"
+                    graphVC.navigationItem.title = "cos(x)"
                 }
             }
         }
