@@ -11,7 +11,7 @@ import UIKit
 class CalculatorViewController: UIViewController {
     
     private var userIsInTheMiddleOfTyping = false
-        
+    
     @IBAction private func touchDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         
@@ -47,28 +47,14 @@ class CalculatorViewController: UIViewController {
         return displayValueAsString
     }
     
-    var savedProgram: CalculatorBrain.PropertyList?
-    
-    @IBAction func save() {
-        savedProgram = brain.program
-    }
-    
-    @IBAction func restore() {
-        if savedProgram != nil {
-            brain.program = savedProgram!
-            displayValue = brain.result
-        }
-        
-    }
-    
-    @IBAction func setVar(sender: UIButton) {
+    @IBAction private func setVar(sender: UIButton) {
         let variableName = String(sender.currentTitle!.characters.dropFirst())
         brain.variableValues[variableName] = displayValue
         updateDisplay()
         userIsInTheMiddleOfTyping = false
     }
     
-    @IBAction func getVar(sender: UIButton) {
+    @IBAction private func getVar(sender: UIButton) {
         brain.setOperand(sender.currentTitle!)
         if brain.variableValues[sender.currentTitle!] != nil {
             displayValue = brain.result
@@ -79,11 +65,11 @@ class CalculatorViewController: UIViewController {
         userIsInTheMiddleOfTyping = false
     }
     
-    @IBAction func clearDisplay(sender: UIButton) {
+    @IBAction func updateDisplay(sender: UIButton) {
         updateDisplay()
     }
     
-    @IBAction func undo(sender: UIButton) {
+    @IBAction private func undo(sender: UIButton) {
         if userIsInTheMiddleOfTyping {
             let currentDisplay = formatDisplayValue(displayValue)
             // updates displayValue to what the user sees
@@ -124,7 +110,7 @@ class CalculatorViewController: UIViewController {
     @IBOutlet private weak var display: UILabel!
     
     
-    @IBOutlet weak var descrip: UILabel!
+    @IBOutlet private weak var descrip: UILabel!
 
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -137,9 +123,7 @@ class CalculatorViewController: UIViewController {
         
         if let graphVC = destinationVC as? GraphViewController {
             if segue.identifier == "graph" {
-                graphVC.slope = displayValue
                 graphVC.program = brain.program
-                
                 
                 if self.descrip.text != nil {
                     graphVC.navigationItem.title = brain.programAsString()
