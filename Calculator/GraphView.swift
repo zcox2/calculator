@@ -26,7 +26,6 @@ class GraphView: UIView {
         switch recognizer.state {
         case .Changed, .Ended:
             pointsPerUnit *= recognizer.scale
-            print(pointsPerUnit)
             recognizer.scale = 1.0
         default:
             break
@@ -59,6 +58,7 @@ class GraphView: UIView {
             y: origin.y - point.y * pointsPerUnit
         )
     }
+    
     func runCalculatorProgram(program: [AnyObject]) -> UIBezierPath {
         graphProgram = program
         brain.program = program
@@ -79,7 +79,6 @@ class GraphView: UIView {
         
         while(x < Double(maxX)) {
             x += 5 / Double(pointsPerUnit)
-            print("evaluating \(x)")
             brain.variableValues["x"] = Double(x)
             if brain.result.isNaN {
                 y = 0
@@ -91,21 +90,7 @@ class GraphView: UIView {
         return line
     }
     
-    func generateLineFromStoredOperation() -> UIBezierPath {
-        let minX = -origin.x / pointsPerUnit // maxX and minX is in graph units
-        let maxX = (bounds.width - origin.x) / pointsPerUnit
-        var x = Double(minX)
-        var y = operation(x)
-        let line = UIBezierPath()
-        line.moveToPoint(pointInGraphView(CGPoint(x: x, y: y)))
-        
-        while(x < Double(maxX)) {
-            x += 1 / Double(pointsPerUnit)
-            y = operation(x)
-            line.addLineToPoint(pointInGraphView(CGPoint(x: x, y: y)))
-        }
-        return line
-    }
+
     
     override func drawRect(rect: CGRect) {
         
@@ -116,8 +101,6 @@ class GraphView: UIView {
         
         if graphProgram.count > 0 {
             line = runCalculatorProgram(graphProgram)
-        } else {
-            line = generateLineFromStoredOperation()
         }
         
         line.lineWidth = lineWidth

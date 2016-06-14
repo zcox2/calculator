@@ -44,6 +44,7 @@ class GraphViewController: UIViewController {
         super.viewDidLoad()
     }
     
+
     override func viewDidAppear(animated: Bool) {
         graphView.origin = CGPoint(x: graphView.bounds.midX, y: graphView.bounds.midY)
         updateUI()

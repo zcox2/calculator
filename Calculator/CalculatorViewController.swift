@@ -11,8 +11,7 @@ import UIKit
 class CalculatorViewController: UIViewController {
     
     private var userIsInTheMiddleOfTyping = false
-    
-    
+        
     @IBAction private func touchDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         
@@ -126,13 +125,7 @@ class CalculatorViewController: UIViewController {
     
     
     @IBOutlet weak var descrip: UILabel!
-    
-    
-    @IBAction func printProgramToConsole(sender: UIButton) {
-        for item in brain.program {
-            print(item)
-        }
-    }
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         

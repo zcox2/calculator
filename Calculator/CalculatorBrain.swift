@@ -16,7 +16,6 @@ class CalculatorBrain {
     private var pendingImplicitOperation = false
     private var history = [AnyObject]()
     
-    
     func setOperand(operand: Double) {
         accumulator = operand
         history.append(operand)
